@@ -19,6 +19,7 @@ package org.wso2.andes.configuration;
 import org.wso2.andes.configuration.models.BrokerConfiguration;
 import org.wso2.carbon.config.ConfigProviderFactory;
 import org.wso2.carbon.config.provider.ConfigProvider;
+import org.wso2.carbon.config.ConfigurationException;
 
 
 import java.nio.file.Path;
@@ -32,15 +33,16 @@ public class BrokerConfigurationService {
     private BrokerConfiguration brokerConfiguration;
 
     // Create new configuration provider
-    Path deploymentConfigPath = Paths.get(System.getProperty(CARBON_HOME), "conf", "broker","deployment.yaml");
+    Path deploymentConfigPath = Paths.get(System.getProperty(AndesConfigurationManager.CARBON_HOME), "conf", "broker",
+            "deployment.yaml");
 
     private BrokerConfigurationService() {
         // Get configuration
         try {
             ConfigProvider configProvider = ConfigProviderFactory.getConfigProvider(deploymentConfigPath);
             brokerConfiguration = configProvider.getConfigurationObject(BrokerConfiguration.class);
-        } catch {
-            logger.error("Error in getting broker configuration from " + deploymentConfigPath.toString(), e);
+        } catch (ConfigurationException e) {
+//            logger.error("Error in getting configuration", e);
         }
     }
 
